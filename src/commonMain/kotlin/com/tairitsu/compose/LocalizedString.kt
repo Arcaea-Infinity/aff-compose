@@ -21,11 +21,11 @@ class LocalizedString : Map<String, String> {
         storage["en"] = enLocale
     }
 
-    var en by Getting
-    var ja by Getting
-    var ko by Getting
-    var zhHans by Getting
-    var zhHant by Getting
+    var en by LocaleGetting
+    var ja by LocaleGetting
+    var ko by LocaleGetting
+    var zhHans by LocaleGetting
+    var zhHant by LocaleGetting
 
     internal operator fun set(key: String, value: String) {
         storage[key] = value
@@ -48,7 +48,7 @@ internal val localeNameMapping = mapOf(
     "en" to "en", "ja" to "ja", "ko" to "ko", "zhHans" to "zh-Hans", "zhHant" to "zh-Hant"
 )
 
-private object Getting {
+private object LocaleGetting {
     operator fun getValue(obj: LocalizedString, property: KProperty<*>): String
         = obj[localeNameMapping[property.name]!!] ?: obj.en
 

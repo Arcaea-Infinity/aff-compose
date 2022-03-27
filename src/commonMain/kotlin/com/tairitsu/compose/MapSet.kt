@@ -1,9 +1,18 @@
 package com.tairitsu.compose
 
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
+ * Arcaea song metadata
+ * The metadata of songs in Arcaea
+ *
  * https://github.com/yojohanshinwataikei/vscode-arcaea-file-format/blob/master/json-schema/songdata.json
  */
 @Serializable
@@ -69,6 +78,7 @@ class MapSet {
     /**
      * The side of the song, 0 for light and 1 for conflict
      */
+    @Serializable(with = MapSetSideSerializer::class)
     var side: Side = Side.LIGHT
 
     enum class Side(val id: Int) {
@@ -85,4 +95,25 @@ class MapSet {
      * The Unix timestamp of the time when the song is added, used to sort the songs by time
      */
     var timestamp: Long = 0
+
+    /**
+     * The difficulties of the song
+     */
+    val difficulties: Difficulties = Difficulties()
+}
+
+object MapSetSideSerializer : KSerializer<MapSet.Side> {
+    override fun deserialize(decoder: Decoder): MapSet.Side = when (decoder.decodeInt()) {
+        0 -> MapSet.Side.LIGHT
+        1 -> MapSet.Side.CONFLICT
+        else -> throw IllegalArgumentException("Invalid side id")
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    override val descriptor: SerialDescriptor
+        get() = SerialDescriptor("MapSet.Side", Int.serializer().descriptor)
+
+    override fun serialize(encoder: Encoder, value: MapSet.Side) {
+        encoder.encodeInt(value.id)
+    }
 }

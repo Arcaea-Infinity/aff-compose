@@ -3,9 +3,10 @@ package com.tairitsu.compose
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.junit.jupiter.api.Test
 
 class LocalizedStringTest {
-    @org.junit.jupiter.api.Test
+    @Test
     fun `test for serialization`() {
         val a = LocalizedString("Test")
         a.ja = "テスト"
@@ -24,3 +25,4 @@ class LocalizedStringTest {
         org.junit.jupiter.api.Assertions.assertEquals(a.zhHant, b.zhHant)
     }
 }
+
