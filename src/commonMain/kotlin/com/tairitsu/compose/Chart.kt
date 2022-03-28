@@ -196,6 +196,7 @@ class ArcNote(
         val sb = StringBuilder()
         sb.append("arc(${time},${endTime},${startPosition.x.affFormat},${startPosition.y.affFormat},${curveType.value},${endPosition.x.affFormat},${endPosition.y.affFormat},${color.value},$padding,$isGuidingLine)")
         if (tapList.isNotEmpty()) {
+            tapList.sort()
             sb.append("[")
             for (idx in tapList.indices) {
                 val tap = tapList[idx]
