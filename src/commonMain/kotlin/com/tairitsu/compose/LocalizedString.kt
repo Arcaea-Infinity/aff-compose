@@ -1,5 +1,6 @@
 package com.tairitsu.compose
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
@@ -8,25 +9,59 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlin.reflect.KProperty
 
-@Serializable(with = LocalizedStringSerializer::class)
+/**
+ * Localized string for Arcaea song data.
+ */
+@Serializable(with = LocalizedString.LocalizedStringSerializer::class)
 class LocalizedString : Map<String, String> {
+    /**
+     * Localized string internal storage map.
+     */
     internal var storage: LinkedHashMap<String, String> = LinkedHashMap()
 
-    constructor(kv: LinkedHashMap<String, String>) {
+    /**
+     * Create a new localized string by giving [map]
+     */
+    internal constructor(kv: LinkedHashMap<String, String>) {
         storage = kv
     }
 
-    public constructor(enLocale: String) {
+    /**
+     * Create a new localized string. English locale is required.
+     */
+    constructor(enLocale: String) {
         storage = LinkedHashMap()
         storage["en"] = enLocale
     }
 
+    /**
+     * Localized string in English locale.
+     */
     var en by LocaleGetting
+
+    /**
+     * Localized string in Japanese locale.
+     */
     var ja by LocaleGetting
+
+    /**
+     * Localized string in Chinese locale.
+     */
     var ko by LocaleGetting
+
+    /**
+     * Localized string in Simplified Chinese locale.
+     */
     var zhHans by LocaleGetting
+
+    /**
+     * Localized string in Traditional Chinese locale.
+     */
     var zhHant by LocaleGetting
 
+    /**
+     * Set localized string
+     */
     internal operator fun set(key: String, value: String) {
         storage[key] = value
     }
@@ -42,33 +77,41 @@ class LocalizedString : Map<String, String> {
     override val keys: MutableSet<String> = storage.keys
     override val values: MutableCollection<String> = storage.values
     override val entries: MutableSet<MutableMap.MutableEntry<String, String>> = storage.entries
-}
 
-internal val localeNameMapping = mapOf(
-    "en" to "en", "ja" to "ja", "ko" to "ko", "zhHans" to "zh-Hans", "zhHant" to "zh-Hant"
-)
+    /**
+     * Delegate for localized string.
+     */
+    private object LocaleGetting {
+        private val localeNameMapping = mapOf(
+            "en" to "en", "ja" to "ja", "ko" to "ko", "zhHans" to "zh-Hans", "zhHant" to "zh-Hant"
+        )
 
-private object LocaleGetting {
-    operator fun getValue(obj: LocalizedString, property: KProperty<*>): String
-        = obj[localeNameMapping[property.name]!!] ?: obj.en
+        operator fun getValue(obj: LocalizedString, property: KProperty<*>): String
+                = obj[localeNameMapping[property.name]!!] ?: obj.en
 
-    operator fun setValue(obj: LocalizedString, property: KProperty<*>, value: String) {
-        obj[localeNameMapping[property.name]!!] = value
-    }
-}
-
-object LocalizedStringSerializer : KSerializer<LocalizedString> {
-    private val mapSerializer = kotlinx.serialization.builtins.MapSerializer(String.serializer(), String.serializer())
-
-    override fun deserialize(decoder: Decoder): LocalizedString {
-        val map = LinkedHashMap(mapSerializer.deserialize(decoder))
-        return LocalizedString(map)
+        operator fun setValue(obj: LocalizedString, property: KProperty<*>, value: String) {
+            obj[localeNameMapping[property.name]!!] = value
+        }
     }
 
-    override val descriptor: SerialDescriptor
-        get() = mapSerializer.descriptor
+    /**
+     * Serializer for [LocalizedString].
+     */
+    object LocalizedStringSerializer : KSerializer<LocalizedString> {
+        private val mapSerializer = kotlinx.serialization.builtins.MapSerializer(String.serializer(), String.serializer())
 
-    override fun serialize(encoder: Encoder, value: LocalizedString) {
-        return mapSerializer.serialize(encoder, value.storage)
+        override fun deserialize(decoder: Decoder): LocalizedString {
+            val map = LinkedHashMap(mapSerializer.deserialize(decoder))
+            return LocalizedString(map)
+        }
+
+        @OptIn(ExperimentalSerializationApi::class)
+        override val descriptor: SerialDescriptor
+            get() = SerialDescriptor("LocalizedString", mapSerializer.descriptor)
+
+        override fun serialize(encoder: Encoder, value: LocalizedString) {
+            return mapSerializer.serialize(encoder, value.storage)
+        }
     }
+
 }

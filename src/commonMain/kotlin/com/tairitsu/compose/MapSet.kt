@@ -100,20 +100,23 @@ class MapSet {
      * The difficulties of the song
      */
     val difficulties: Difficulties = Difficulties()
-}
 
-object MapSetSideSerializer : KSerializer<MapSet.Side> {
-    override fun deserialize(decoder: Decoder): MapSet.Side = when (decoder.decodeInt()) {
-        0 -> MapSet.Side.LIGHT
-        1 -> MapSet.Side.CONFLICT
-        else -> throw IllegalArgumentException("Invalid side id")
-    }
+    /**
+     * MapSetSide serializer
+     */
+    object MapSetSideSerializer : KSerializer<Side> {
+        override fun deserialize(decoder: Decoder): Side = when (decoder.decodeInt()) {
+            0 -> Side.LIGHT
+            1 -> Side.CONFLICT
+            else -> throw IllegalArgumentException("Invalid side id")
+        }
 
-    @OptIn(ExperimentalSerializationApi::class)
-    override val descriptor: SerialDescriptor
-        get() = SerialDescriptor("MapSet.Side", Int.serializer().descriptor)
+        @OptIn(ExperimentalSerializationApi::class)
+        override val descriptor: SerialDescriptor
+            get() = SerialDescriptor("MapSet.Side", Int.serializer().descriptor)
 
-    override fun serialize(encoder: Encoder, value: MapSet.Side) {
-        encoder.encodeInt(value.id)
+        override fun serialize(encoder: Encoder, value: Side) {
+            encoder.encodeInt(value.id)
+        }
     }
 }

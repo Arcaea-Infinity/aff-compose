@@ -59,20 +59,20 @@ class MapSetTest {
         val diff = a.difficulties.future
         Assertions.assertNotNull(diff)
         diff!!
-        Assertions.assertEquals(1, diff.content.mainTiming.timing.size)
-        Assertions.assertEquals(1, diff.content.subTiming.size)
-        Assertions.assertEquals(120.00, diff.content.mainTiming.timing.first().bpm)
-        Assertions.assertEquals(1, diff.content.subTiming.values.first().timing.size)
-        Assertions.assertEquals(120.00 * 4, diff.content.subTiming.values.first().timing.first().bpm)
+        Assertions.assertEquals(1, diff.chart.mainTiming.timing.size)
+        Assertions.assertEquals(1, diff.chart.subTiming.size)
+        Assertions.assertEquals(120.00, diff.chart.mainTiming.timing.first().bpm)
+        Assertions.assertEquals(1, diff.chart.subTiming.values.first().timing.size)
+        Assertions.assertEquals(120.00 * 4, diff.chart.subTiming.values.first().timing.first().bpm)
 
-        Assertions.assertEquals(9, diff.content.mainTiming.notes.size)
-        Assertions.assertEquals(7, diff.content.subTiming.values.first().notes.size)
+        Assertions.assertEquals(9, diff.chart.mainTiming.notes.size)
+        Assertions.assertEquals(7, diff.chart.subTiming.values.first().notes.size)
 
         Assertions.assertEquals("(42000,1);", normalNoteString)
         Assertions.assertEquals("hold(2000,3000,2);", holdNoteString)
         Assertions.assertEquals("arc(10000,20000,0.00,1.00,s,0.00,1.00,0,none,true)[arctap(12000)];", guidingNoteString)
         Assertions.assertEquals("arc(10000,20000,1.00,1.00,s,0.00,1.00,1,none,false);", arcNoteString)
 
-        println(diff.content.serialize())
+        println(diff.chart.serialize())
     }
 }
