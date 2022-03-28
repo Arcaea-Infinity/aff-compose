@@ -51,6 +51,8 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-datetime:0.3.2")
                 // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+                // https://mvnrepository.com/artifact/com.benasher44/uuid
+                api("com.benasher44:uuid:0.4.0")
             }
         }
         val commonTest by getting {

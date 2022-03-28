@@ -25,4 +25,3 @@ class LocalizedStringTest {
         org.junit.jupiter.api.Assertions.assertEquals(a.zhHant, b.zhHant)
     }
 }
-
