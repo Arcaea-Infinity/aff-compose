@@ -1,8 +1,6 @@
 package com.tairitsu.compose
 
-import io.ktor.utils.io.streams.*
 import java.io.File
-import java.nio.file.Files
 
 fun main() {
     mapSet {

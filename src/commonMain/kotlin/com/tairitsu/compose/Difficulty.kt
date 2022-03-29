@@ -1,6 +1,5 @@
 package com.tairitsu.compose
 
-import com.benasher44.uuid.uuid4
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -55,17 +54,24 @@ class Difficulty {
      * The context while mapping in code.
      */
     @Transient
-    internal val context: ArrayDeque<TimingGroup> = ArrayDeque()
+    internal val context: DifficultyContext = DifficultyContext()
+
+    /**
+     * The difficulty context while mapping.
+     */
+    class DifficultyContext {
+        val timingGroupStack: ArrayDeque<TimingGroup> = ArrayDeque()
+    }
 
     /**
      * Get the current context.
      */
     internal val currentTimingGroup: TimingGroup
         get() {
-            return if (context.isEmpty()) {
+            return if (context.timingGroupStack.isEmpty()) {
                 chart.mainTiming
             } else {
-                context.last()
+                context.timingGroupStack.last()
             }
         }
 
