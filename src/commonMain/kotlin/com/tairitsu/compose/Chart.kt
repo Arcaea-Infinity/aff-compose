@@ -68,7 +68,7 @@ class TimingGroup(val name: String) {
             get() = offset
 
         override fun serialize(): String {
-            return "timine($offset,${bpm.affFormat},${beats.affFormat})"
+            return "timing($offset,${bpm.affFormat},${beats.affFormat})"
         }
     }
 
