@@ -1,6 +1,9 @@
 package com.tairitsu.compose
 
 import com.benasher44.uuid.uuid4
+import io.ktor.utils.io.core.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 
 /**
  * Creating a new instance of [MapSet]
@@ -11,8 +14,46 @@ fun mapSet(closure: MapSet.() -> Unit): MapSet {
     return mapSet
 }
 
-fun MapSet.build(path: String) {
+@OptIn(ExperimentalSerializationApi::class)
+private val json = Json {
+    encodeDefaults = true
+    explicitNulls = false
+}
 
+fun MapSet.writeToOutput(outputFactory: (String) -> Output) {
+    val songDataOutput = outputFactory("song_data.json")
+    val songData = json.encodeToString(MapSet.serializer(), this)
+    songDataOutput.writeFully(songData.toByteArray())
+    songDataOutput.close()
+
+    val difficulties = this.difficulties
+    for (difficulty in difficulties) {
+        val difficultyOutput = outputFactory("${difficulty.ratingClass.rating}.aff")
+        val difficultyData = difficulty.chart.serialize()
+        difficultyOutput.writeFully(difficultyData.toByteArray())
+        difficultyOutput.close()
+    }
+
+    val songConfig = outputFactory("songconfig.txt")
+    songConfig.writeFully("id=${this.id}\r\n".toByteArray())
+    songConfig.writeFully("title=${this.titleLocalized.en}\r\n".toByteArray())
+    songConfig.writeFully("artist=${this.artist}\r\n".toByteArray())
+    songConfig.writeFully("designer=${
+        this.difficulties.map { it.chartDesigner }.toSet().joinToString(separator = ",")
+    }\r\n".toByteArray())
+    songConfig.writeFully("bpm_disp=${this.bpm}\r\n".toByteArray())
+    songConfig.writeFully("bpm_base=${this.bpmBase}\r\n".toByteArray())
+    songConfig.writeFully("side=${this.side.id}\r\n".toByteArray())
+    songConfig.writeFully("diff=${
+        this.difficulties.past?.rating ?: 0
+    }-${
+        this.difficulties.present?.rating ?: 0
+    }-${
+        this.difficulties.future?.rating ?: 0
+    }-${
+        this.difficulties.beyond?.rating ?: 0
+    }\r\n".toByteArray())
+    songConfig.close()
 }
 
 /**

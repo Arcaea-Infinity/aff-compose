@@ -36,12 +36,6 @@ kotlin {
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
     }
 
-    run {
-        sourceSets.create("demoMap") {
-            kotlin.srcDir("src/main/kotlin")
-        }
-    }
-
     sourceSets {
         val commonMain by getting {
             dependencies {
@@ -53,6 +47,8 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
                 // https://mvnrepository.com/artifact/com.benasher44/uuid
                 api("com.benasher44:uuid:0.4.0")
+                // https://mvnrepository.com/artifact/io.ktor/ktor-io
+                api("io.ktor:ktor-io:2.0.0-beta-1")
             }
         }
         val commonTest by getting {
@@ -66,9 +62,5 @@ kotlin {
         val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting
-
-        val demoMap by getting {
-            dependsOn(commonMain)
-        }
     }
 }
