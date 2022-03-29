@@ -115,9 +115,9 @@ fun Difficulty.timing(offset: Long, bpm: Double, beats: Double): TimingGroup.Tim
  */
 fun Difficulty.timingGroup(name: String = uuid4().toString(), closure: TimingGroup.() -> Unit): TimingGroup {
     val newTimingGroup = chart.subTiming.getOrPut(name) { TimingGroup(name) }
-    context.addLast(newTimingGroup)
+    context.timingGroupStack.addLast(newTimingGroup)
     closure(newTimingGroup)
-    context.removeLast()
+    context.timingGroupStack.removeLast()
     return newTimingGroup
 }
 
