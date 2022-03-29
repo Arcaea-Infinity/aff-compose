@@ -90,12 +90,12 @@ fun Difficulty.normalNote(time: Long, column: Int): NormalNote {
 
 // Hold Note
 
-fun Difficulty.holdNote(time: Int, end: Int, column: Int) = holdNote(time.toLong(), end.toLong(), column)
-fun Difficulty.holdNote(time: Long, end: Int, column: Int) = holdNote(time, end.toLong(), column)
-fun Difficulty.holdNote(time: Int, end: Long, column: Int) = holdNote(time.toLong(), end, column)
-fun Difficulty.holdNote(time: Long, end: Long, column: Int): HoldNote {
+fun Difficulty.holdNote(time: Int, endTime: Int, column: Int) = holdNote(time.toLong(), endTime.toLong(), column)
+fun Difficulty.holdNote(time: Long, endTime: Int, column: Int) = holdNote(time, endTime.toLong(), column)
+fun Difficulty.holdNote(time: Int, endTime: Long, column: Int) = holdNote(time.toLong(), endTime, column)
+fun Difficulty.holdNote(time: Long, endTime: Long, column: Int): HoldNote {
     val ctx = this.currentTimingGroup
-    val ret = HoldNote(time, end, column)
+    val ret = HoldNote(time, endTime, column)
     ctx.notes.add(ret)
     return ret
 }
