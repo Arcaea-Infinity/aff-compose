@@ -213,6 +213,7 @@ class ArcNote(
 
     enum class Type(val value: String) {
         S("s"),
+        B("b"),
         SI("si"),
         SO("so"),
         SISI("sisi"),

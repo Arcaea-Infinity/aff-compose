@@ -106,6 +106,8 @@ fun Difficulty.holdNote(time: Long, endTime: Long, column: Int): HoldNote {
 
 val Difficulty.s: ArcNote.Type
     get() = ArcNote.Type.S
+val Difficulty.b: ArcNote.Type
+    get() = ArcNote.Type.B
 val Difficulty.si: ArcNote.Type
     get() = ArcNote.Type.SI
 val Difficulty.so: ArcNote.Type

@@ -6,11 +6,6 @@ import org.junit.jupiter.api.Test
 class MapSetTest {
     @Test
     fun `test context`() {
-        var normalNoteString = ""
-        var holdNoteString = ""
-        var guidingNoteString = ""
-        var arcNoteString = ""
-
         val a = mapSet {
             difficulties.future {
                 timing(
@@ -22,18 +17,18 @@ class MapSetTest {
                     normalNote(i * 1000 * 3, 1)
                 }
                 normalNote(14 * 1000 * 3, 1).also {
-                    normalNoteString = it.serialize()
+                    Assertions.assertEquals("(42000,1);", it.serialize())
                 }
                 holdNote(2000, 3000, 2).also {
-                    holdNoteString = it.serialize()
+                    Assertions.assertEquals("hold(2000,3000,2);", it.serialize())
                 }
                 arcNote(10000, 20000, 0.0 to 1.0, s, 0.0 to 1.0) {
                     tap(12000)
                 }.also {
-                    guidingNoteString = it.serialize()
+                    Assertions.assertEquals("arc(10000,20000,0.00,1.00,s,0.00,1.00,0,none,true)[arctap(12000)];", it.serialize())
                 }
                 arcNote(10000, 20000, 1.0 to 1.0, s, 0.0 to 1.0, ArcNote.Color.RED, false).also {
-                    arcNoteString = it.serialize()
+                    Assertions.assertEquals("arc(10000,20000,1.00,1.00,s,0.00,1.00,1,none,false);", it.serialize())
                 }
 
 
@@ -68,10 +63,6 @@ class MapSetTest {
         Assertions.assertEquals(9, diff.chart.mainTiming.notes.size)
         Assertions.assertEquals(7, diff.chart.subTiming.values.first().notes.size)
 
-        Assertions.assertEquals("(42000,1);", normalNoteString)
-        Assertions.assertEquals("hold(2000,3000,2);", holdNoteString)
-        Assertions.assertEquals("arc(10000,20000,0.00,1.00,s,0.00,1.00,0,none,true)[arctap(12000)];", guidingNoteString)
-        Assertions.assertEquals("arc(10000,20000,1.00,1.00,s,0.00,1.00,1,none,false);", arcNoteString)
 
         println(diff.chart.serialize())
     }
