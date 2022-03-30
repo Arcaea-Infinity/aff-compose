@@ -25,10 +25,10 @@ class MapSetTest {
                 arcNote(10000, 20000, 0.0 to 1.0, s, 0.0 to 1.0) {
                     tap(12000)
                 }.also {
-                    Assertions.assertEquals("arc(10000,20000,0.00,1.00,s,0.00,1.00,0,none,true)[arctap(12000)];", it.serialize())
+                    Assertions.assertEquals("arc(10000,20000,0.00,0.00,s,1.00,1.00,0,none,true)[arctap(12000)];", it.serialize())
                 }
                 arcNote(10000, 20000, 1.0 to 1.0, s, 0.0 to 1.0, ArcNote.Color.RED, false).also {
-                    Assertions.assertEquals("arc(10000,20000,1.00,1.00,s,0.00,1.00,1,none,false);", it.serialize())
+                    Assertions.assertEquals("arc(10000,20000,1.00,0.00,s,1.00,1.00,1,none,false);", it.serialize())
                 }
 
 

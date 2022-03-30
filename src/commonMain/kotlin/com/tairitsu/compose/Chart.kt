@@ -12,6 +12,9 @@ class Chart {
     fun serialize(): String {
         val sb = StringBuilder()
 
+        sb.append("AudioOffset:0\r\n")
+        sb.append("-\r\n")
+
         sb.append(mainTiming.serialize(0))
         for (timing in subTiming.values) {
             sb.append("timinggroup(){\r\n")
@@ -68,7 +71,7 @@ class TimingGroup(val name: String) {
             get() = offset
 
         override fun serialize(): String {
-            return "timing($offset,${bpm.affFormat},${beats.affFormat})"
+            return "timing($offset,${bpm.affFormat},${beats.affFormat});"
         }
     }
 
@@ -194,7 +197,7 @@ class ArcNote(
 
     override fun serialize(): String {
         val sb = StringBuilder()
-        sb.append("arc(${time},${endTime},${startPosition.x.affFormat},${startPosition.y.affFormat},${curveType.value},${endPosition.x.affFormat},${endPosition.y.affFormat},${color.value},$padding,$isGuidingLine)")
+        sb.append("arc(${time},${endTime},${startPosition.x.affFormat},${endPosition.x.affFormat},${curveType.value},${startPosition.y.affFormat},${endPosition.y.affFormat},${color.value},$padding,$isGuidingLine)")
         if (tapList.isNotEmpty()) {
             tapList.sort()
             sb.append("[")

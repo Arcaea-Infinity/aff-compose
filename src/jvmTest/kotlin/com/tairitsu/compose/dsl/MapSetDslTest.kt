@@ -51,7 +51,7 @@ class MapSetDslTest {
                         tap(8)
                         tap(12)
                     }.also {
-                        Assertions.assertEquals("arc(32000,34000,0.00,1.00,s,0.00,1.00,0,none,true)[arctap(32000),arctap(32500),arctap(33000),arctap(33500)];", it.serialize())
+                        Assertions.assertEquals("arc(32000,34000,0.00,0.00,s,1.00,1.00,0,none,true)[arctap(32000),arctap(32500),arctap(33000),arctap(33500)];", it.serialize())
                     }
                 }
 
@@ -61,7 +61,7 @@ class MapSetDslTest {
                     d(4)
 
                     arcNote(0, 16, 1.0 to 1.0, b, 0.0 to 1.0, ArcNote.Color.RED, false).also {
-                        Assertions.assertEquals("arc(40000,48000,1.00,1.00,b,0.00,1.00,1,none,false);", it.serialize())
+                        Assertions.assertEquals("arc(40000,48000,1.00,0.00,b,1.00,1.00,1,none,false);", it.serialize())
                     }
                 }
 
