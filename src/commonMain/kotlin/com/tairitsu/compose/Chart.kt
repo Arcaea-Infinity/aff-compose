@@ -19,7 +19,7 @@ class Chart {
         for (timing in subTiming.values) {
             sb.append("timinggroup(){\r\n")
             sb.append(timing.serialize(padding = 4))
-            sb.append("}\r\n")
+            sb.append("};\r\n")
         }
 
         return sb.toString().trim { it <= ' ' }
