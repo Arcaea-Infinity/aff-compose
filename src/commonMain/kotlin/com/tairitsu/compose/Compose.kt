@@ -168,8 +168,8 @@ fun Difficulty.arcNote(
     startPosition: Position,
     curveType: ArcNote.Type,
     endPosition: Position,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time.toLong(), endTime.toLong(), startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -179,8 +179,8 @@ fun Difficulty.arcNote(
     startPosition: Position,
     curveType: ArcNote.Type,
     endPosition: Position,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time, endTime.toLong(), startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -190,8 +190,8 @@ fun Difficulty.arcNote(
     startPosition: Position,
     curveType: ArcNote.Type,
     endPosition: Position,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time.toLong(), endTime, startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -201,12 +201,12 @@ fun Difficulty.arcNote(
     startPosition: Position,
     curveType: ArcNote.Type,
     endPosition: Position,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ): ArcNote {
     val ctx = this.currentTimingGroup
-    val ret = ArcNote(time, endTime, startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
+    val ret = ArcNote(time, endTime, startPosition, curveType, endPosition, color ?: ArcNote.Color.BLUE, isGuidingLine, arcTapClosure)
     ctx.notes.add(ret)
     return ret
 }
@@ -217,8 +217,8 @@ fun Difficulty.arcNote(
     startPosition: Pair<Double, Double>,
     curveType: ArcNote.Type,
     endPosition: Pair<Double, Double>,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time.toLong(), endTime.toLong(), startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -228,8 +228,8 @@ fun Difficulty.arcNote(
     startPosition: Pair<Double, Double>,
     curveType: ArcNote.Type,
     endPosition: Pair<Double, Double>,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time, endTime.toLong(), startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -239,8 +239,8 @@ fun Difficulty.arcNote(
     startPosition: Pair<Double, Double>,
     curveType: ArcNote.Type,
     endPosition: Pair<Double, Double>,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ) = arcNote(time.toLong(), endTime, startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
 
@@ -250,12 +250,12 @@ fun Difficulty.arcNote(
     startPosition: Pair<Double, Double>,
     curveType: ArcNote.Type,
     endPosition: Pair<Double, Double>,
-    color: ArcNote.Color = ArcNote.Color.BLUE,
-    isGuidingLine: Boolean = true,
+    color: ArcNote.Color? = null,
+    isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ): ArcNote {
     val ctx = this.currentTimingGroup
-    val ret = ArcNote(time, endTime, startPosition, curveType, endPosition, color, isGuidingLine, arcTapClosure)
+    val ret = ArcNote(time, endTime, startPosition, curveType, endPosition, color ?: ArcNote.Color.BLUE, isGuidingLine, arcTapClosure)
     ctx.notes.add(ret)
     return ret
 }
