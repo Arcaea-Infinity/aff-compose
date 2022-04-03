@@ -10,7 +10,7 @@ import com.tairitsu.compose.ArcNote as MappingArcNote
  * [diff] is the difficulty we are modifying.
  * [count] is the bar number we are modifying.
  */
-class Bar(val diff: Difficulty, val count: Int) {
+class Bar(private val diff: Difficulty, private val count: Int) {
 
     /**
      * Current timing group.
@@ -48,18 +48,28 @@ class Bar(val diff: Difficulty, val count: Int) {
     private val barStartTime = (currentTiming.barDuration * count + currentTiming.offset)
 
     /**
-     * Calculate the milliseconds for a beat
+     * Bar start time
      */
-    private fun calculateTimestamp(beat: Double): Long {
-        return (barStartTime + beat * beatDuration).roundToLong()
-    }
+    val startTime = barStartTime.roundToLong()
 
     /**
      * Calculate the milliseconds for a beat
      */
-    private fun calculateTimestamp(beat: Int): Long {
-        return (barStartTime + beat * beatDuration).roundToLong()
-    }
+    private fun calculateTimestamp(beat: Double): Long
+        = (barStartTime + beat * beatDuration).roundToLong()
+
+
+    /**
+     * Calculate the milliseconds for a beat
+     */
+    private fun calculateTimestamp(beat: Int): Long
+        = (barStartTime + beat * beatDuration).roundToLong()
+
+    /**
+     * Calculate the milliseconds for a beat
+     */
+    fun Number.toTimestamp(): Long
+        = calculateTimestamp(this.toDouble())
 
     /**
      * Divide one bar into [val] parts
@@ -160,13 +170,13 @@ class Bar(val diff: Difficulty, val count: Int) {
         isGuidingLine: Boolean = color == null,
         arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
     ) = diff.arcNote(calculateTimestamp(time),
-            calculateTimestamp(endTime),
-            startPosition,
-            curveType,
-            endPosition,
-            color,
-            isGuidingLine,
-            ArcNote.ArcTapList.createProxy(this, arcTapClosure))
+        calculateTimestamp(endTime),
+        startPosition,
+        curveType,
+        endPosition,
+        color,
+        isGuidingLine,
+        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
 
     fun arcNote(
         time: Double,
@@ -232,13 +242,13 @@ class Bar(val diff: Difficulty, val count: Int) {
         isGuidingLine: Boolean = color == null,
         arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
     ) = diff.arcNote(calculateTimestamp(time),
-            calculateTimestamp(endTime),
-            startPosition,
-            curveType,
-            endPosition,
-            color,
-            isGuidingLine,
-            ArcNote.ArcTapList.createProxy(this, arcTapClosure))
+        calculateTimestamp(endTime),
+        startPosition,
+        curveType,
+        endPosition,
+        color,
+        isGuidingLine,
+        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
 
     /**
      * ArcNote Proxy
