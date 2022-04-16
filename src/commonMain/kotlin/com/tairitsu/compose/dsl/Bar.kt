@@ -55,21 +55,12 @@ class Bar(private val diff: Difficulty, private val count: Int) {
     /**
      * Calculate the milliseconds for a beat
      */
-    private fun calculateTimestamp(beat: Double): Long
-        = (barStartTime + beat * beatDuration).roundToLong()
-
+    private fun calculateTimestamp(beat: Number): Long = (barStartTime + beat.toDouble() * beatDuration).roundToLong()
 
     /**
      * Calculate the milliseconds for a beat
      */
-    private fun calculateTimestamp(beat: Int): Long
-        = (barStartTime + beat * beatDuration).roundToLong()
-
-    /**
-     * Calculate the milliseconds for a beat
-     */
-    fun Number.toTimestamp(): Long
-        = calculateTimestamp(this.toDouble())
+    fun Number.toTimestamp(): Long = calculateTimestamp(this.toDouble())
 
     /**
      * Divide one bar into [val] parts
@@ -86,32 +77,19 @@ class Bar(private val diff: Difficulty, private val count: Int) {
     }
 
     // Normal Note
-
-    fun normalNote(time: Double, column: Int) = diff.normalNote(calculateTimestamp(time), column)
-    fun normalNote(time: Int, column: Int) = diff.normalNote(calculateTimestamp(time), column)
+    fun <TTime : Number> normalNote(time: TTime, column: Int) = diff.normalNote(calculateTimestamp(time), column)
 
     // Hold Note
-
-    fun holdNote(time: Double, endTime: Double, column: Int) =
-        diff.holdNote(calculateTimestamp(time), calculateTimestamp(endTime), column)
-
-    fun holdNote(time: Double, endTime: Int, column: Int) =
-        diff.holdNote(calculateTimestamp(time), calculateTimestamp(endTime), column)
-
-    fun holdNote(time: Int, endTime: Double, column: Int) =
-        diff.holdNote(calculateTimestamp(time), calculateTimestamp(endTime), column)
-
-    fun holdNote(time: Int, endTime: Int, column: Int) =
+    fun <TTime : Number, TEndTime : Number> holdNote(time: TTime, endTime: TEndTime, column: Int) =
         diff.holdNote(calculateTimestamp(time), calculateTimestamp(endTime), column)
 
     // Arc Note
-
-    fun arcNote(
-        time: Double,
-        endTime: Double,
-        startPosition: Pair<Double, Double>,
+    fun <TTime : Number, TEndTime : Number, TStartPositionX : Number, TStartPositionY : Number, TEndPositionX : Number, TEndPositionY : Number> arcNote(
+        time: TTime,
+        endTime: TEndTime,
+        startPosition: Pair<TStartPositionX, TStartPositionY>,
         curveType: MappingArcNote.Type,
-        endPosition: Pair<Double, Double>,
+        endPosition: Pair<TEndPositionX, TEndPositionY>,
         color: MappingArcNote.Color? = null,
         isGuidingLine: Boolean = color == null,
         arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
@@ -124,117 +102,10 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         isGuidingLine,
         ArcNote.ArcTapList.createProxy(this, arcTapClosure))
 
-    fun arcNote(
-        time: Double,
-        endTime: Int,
-        startPosition: Pair<Double, Double>,
-        curveType: MappingArcNote.Type,
-        endPosition: Pair<Double, Double>,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
 
-    fun arcNote(
-        time: Int,
-        endTime: Double,
-        startPosition: Pair<Double, Double>,
-        curveType: MappingArcNote.Type,
-        endPosition: Pair<Double, Double>,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
-
-    fun arcNote(
-        time: Int,
-        endTime: Int,
-        startPosition: Pair<Double, Double>,
-        curveType: MappingArcNote.Type,
-        endPosition: Pair<Double, Double>,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
-
-    fun arcNote(
-        time: Double,
-        endTime: Double,
-        startPosition: Position,
-        curveType: MappingArcNote.Type,
-        endPosition: Position,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
-
-    fun arcNote(
-        time: Double,
-        endTime: Int,
-        startPosition: Position,
-        curveType: MappingArcNote.Type,
-        endPosition: Position,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
-
-    fun arcNote(
-        time: Int,
-        endTime: Double,
-        startPosition: Position,
-        curveType: MappingArcNote.Type,
-        endPosition: Position,
-        color: MappingArcNote.Color? = null,
-        isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
-        calculateTimestamp(endTime),
-        startPosition,
-        curveType,
-        endPosition,
-        color,
-        isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
-
-    fun arcNote(
-        time: Int,
-        endTime: Int,
+    fun <TTime : Number, TEndTime : Number> arcNote(
+        time: TTime,
+        endTime: TEndTime,
         startPosition: Position,
         curveType: MappingArcNote.Type,
         endPosition: Position,
@@ -260,11 +131,11 @@ class Bar(private val diff: Difficulty, private val count: Int) {
          * Create an ArcNote Tap List with bar based timestamp.
          */
         class ArcTapList(val bar: Bar, private val addTap: (Int) -> Unit) {
-            fun tap(tap: Int) {
+            fun tap(tap: Number) {
                 addTap(bar.calculateTimestamp(tap).toInt())
             }
 
-            fun arctap(tap: Int) {
+            fun arctap(tap: Number) {
                 addTap(bar.calculateTimestamp(tap).toInt())
             }
 

@@ -53,7 +53,7 @@ interface TimedObject {
     }
 }
 
-val Double.affFormat: String
+internal val Double.affFormat: String
     get() {
         val ret = ((this * 100.00).roundToInt() / 100.00).toString()
         val len = ret.length

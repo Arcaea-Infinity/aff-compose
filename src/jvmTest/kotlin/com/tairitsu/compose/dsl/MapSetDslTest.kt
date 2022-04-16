@@ -3,7 +3,6 @@ package com.tairitsu.compose.dsl
 import com.tairitsu.compose.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.util.*
 
 class MapSetDslTest {
     @Test
