@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 import io.ktor.utils.io.streams.*
 import java.io.File

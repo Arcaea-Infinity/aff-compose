@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 import com.benasher44.uuid.uuid4
 import io.ktor.utils.io.core.*

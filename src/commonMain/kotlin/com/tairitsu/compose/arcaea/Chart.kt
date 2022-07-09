@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 import kotlin.math.roundToInt
 

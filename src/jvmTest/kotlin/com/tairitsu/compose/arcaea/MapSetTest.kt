@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test

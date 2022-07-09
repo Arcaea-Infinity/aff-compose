@@ -1,8 +1,9 @@
-package com.tairitsu.compose.dsl
+package com.tairitsu.compose.arcaea.dsl
 
 import com.tairitsu.compose.*
+import com.tairitsu.compose.arcaea.*
 import kotlin.math.roundToLong
-import com.tairitsu.compose.ArcNote as MappingArcNote
+import com.tairitsu.compose.arcaea.ArcNote as MappingArcNote
 
 /**
  * Bar definition.
@@ -92,7 +93,7 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         endPosition: Pair<TEndPositionX, TEndPositionY>,
         color: MappingArcNote.Color? = null,
         isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
+        arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
     ) = diff.arcNote(calculateTimestamp(time),
         calculateTimestamp(endTime),
         startPosition,
@@ -100,7 +101,8 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         endPosition,
         color,
         isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
+        ArcNote.ArcTapList.createProxy(this, arcTapClosure)
+    )
 
 
     fun <TTime : Number, TEndTime : Number> arcNote(
@@ -111,7 +113,7 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         endPosition: Position,
         color: MappingArcNote.Color? = null,
         isGuidingLine: Boolean = color == null,
-        arcTapClosure: (Bar.ArcNote.ArcTapList.() -> Unit) = {},
+        arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
     ) = diff.arcNote(calculateTimestamp(time),
         calculateTimestamp(endTime),
         startPosition,
@@ -119,7 +121,8 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         endPosition,
         color,
         isGuidingLine,
-        ArcNote.ArcTapList.createProxy(this, arcTapClosure))
+        ArcNote.ArcTapList.createProxy(this, arcTapClosure)
+    )
 
     /**
      * ArcNote Proxy

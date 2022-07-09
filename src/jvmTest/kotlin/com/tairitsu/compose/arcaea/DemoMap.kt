@@ -1,7 +1,7 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
-import com.tairitsu.compose.dsl.Bar
-import com.tairitsu.compose.dsl.bar
+import com.tairitsu.compose.arcaea.dsl.Bar
+import com.tairitsu.compose.arcaea.dsl.bar
 import java.io.File
 import kotlin.math.floor
 

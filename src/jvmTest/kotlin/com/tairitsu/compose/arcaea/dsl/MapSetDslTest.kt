@@ -1,6 +1,7 @@
-package com.tairitsu.compose.dsl
+package com.tairitsu.compose.arcaea.dsl
 
 import com.tairitsu.compose.*
+import com.tairitsu.compose.arcaea.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 

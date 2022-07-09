@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
@@ -79,11 +79,11 @@ class Difficulty {
      * Serializer for [RatingClass]
      */
     object DifficultyRatingClassSerializer : KSerializer<RatingClass> {
-        override fun deserialize(decoder: Decoder): Difficulty.RatingClass = when (decoder.decodeInt()) {
-            0 -> Difficulty.RatingClass.PAST
-            1 -> Difficulty.RatingClass.PRESENT
-            2 -> Difficulty.RatingClass.FUTURE
-            3 -> Difficulty.RatingClass.BEYOND
+        override fun deserialize(decoder: Decoder): RatingClass = when (decoder.decodeInt()) {
+            0 -> RatingClass.PAST
+            1 -> RatingClass.PRESENT
+            2 -> RatingClass.FUTURE
+            3 -> RatingClass.BEYOND
             else -> throw IllegalArgumentException("Invalid rating class")
         }
 
@@ -91,7 +91,7 @@ class Difficulty {
         override val descriptor: SerialDescriptor
             get() = SerialDescriptor("Difficulty.RatingClass", Int.serializer().descriptor)
 
-        override fun serialize(encoder: Encoder, value: Difficulty.RatingClass) {
+        override fun serialize(encoder: Encoder, value: RatingClass) {
             encoder.encodeInt(value.rating)
         }
     }

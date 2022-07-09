@@ -1,4 +1,4 @@
-package com.tairitsu.compose
+package com.tairitsu.compose.arcaea
 
 fun assertDifficultyEquals(a: Difficulty?, b: Difficulty?) {
     org.junit.jupiter.api.Assertions.assertNotNull(a)
