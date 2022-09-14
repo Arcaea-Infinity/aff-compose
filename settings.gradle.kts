@@ -1,1 +1,1 @@
-rootProject.name = "aff_compose"
+rootProject.name = "aff-compose"

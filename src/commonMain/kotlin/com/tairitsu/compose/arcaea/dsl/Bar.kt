@@ -28,7 +28,8 @@ class Bar(private val diff: Difficulty, private val count: Int) {
     /**
      * Division for a bar
      */
-    private var divide: Double = currentTiming.beats
+    var divide: Double = currentTiming.beats
+        private set
 
     /**
      * How long a bar is

@@ -1,10 +1,14 @@
 plugins {
     kotlin("multiplatform") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
+    id("java")
+    id("java-library")
+    id("maven-publish")
+    id("signing")
 }
 
 group = "com.tairitsu"
-version = "1.0-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -63,4 +67,21 @@ kotlin {
         val nativeMain by getting
         val nativeTest by getting
     }
+
+    val publicationsFromMainHost =
+        listOf(jvm(), js()).map { it.name } + "kotlinMultiplatform"
+
+    publishing {
+        publications {
+            matching { it.name in publicationsFromMainHost }.all {
+                val targetPublication = this@all
+                tasks.withType<AbstractPublishToMaven>()
+                    .matching { it.publication == targetPublication }
+                    .configureEach { onlyIf { findProperty("isMainHost") == "true" } }
+            }
+        }
+    }
+    project.ext.set("POM_DESCRIPTION", "Arcaea Aff composing DSL")
 }
+
+apply { from(project.file("$rootDir/gradle/publish-helper.gradle.kts")) }

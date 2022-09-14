@@ -187,24 +187,27 @@ class ArcNote(
     private val isGuidingLineField: Boolean = isGuidingLine
 
     val isGuidingLine: Boolean
-        get() = isGuidingLineField || tapList.isNotEmpty()
+        get() = isGuidingLineField || tapTimestampList.isNotEmpty()
 
-    private val tapList: MutableList<Int> = mutableListOf()
+    private val tapTimestampList: MutableList<Int> = mutableListOf()
+
+    val tapList: ArcTapList
+        get() = ArcTapList(tapTimestampList)
 
     init {
-        arcTapClosure(ArcTapList(tapList))
+        arcTapClosure(tapList)
     }
 
     override fun serialize(): String {
         val sb = StringBuilder()
         sb.append("arc(${time},${endTime},${startPosition.x.affFormat},${endPosition.x.affFormat},${curveType.value},${startPosition.y.affFormat},${endPosition.y.affFormat},${color.value},$padding,$isGuidingLine)")
-        if (tapList.isNotEmpty()) {
-            tapList.sort()
+        if (tapTimestampList.isNotEmpty()) {
+            tapTimestampList.sort()
             sb.append("[")
-            for (idx in tapList.indices) {
-                val tap = tapList[idx]
+            for (idx in tapTimestampList.indices) {
+                val tap = tapTimestampList[idx]
                 sb.append("arctap(${tap})")
-                if (idx < tapList.size - 1) {
+                if (idx < tapTimestampList.size - 1) {
                     sb.append(",")
                 }
             }
