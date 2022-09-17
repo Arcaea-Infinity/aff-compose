@@ -234,12 +234,16 @@ class ArcNote(
     }
 
     class ArcTapList(private val tapList: MutableList<Int>) {
-        fun tap(tap: Int) {
-            tapList.add(tap)
+        fun tap(vararg tap: Int) {
+            tap.forEach { tapList.add(it) }
         }
 
-        fun arctap(tap: Int) {
-            tapList.add(tap)
+        fun arctap(vararg tap: Int) {
+            tap(*tap)
+        }
+
+        fun arcTap(vararg tap: Int) {
+            tap(*tap)
         }
     }
 }

@@ -95,7 +95,8 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         color: MappingArcNote.Color? = null,
         isGuidingLine: Boolean = color == null,
         arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
+    ) = diff.arcNote(
+        calculateTimestamp(time),
         calculateTimestamp(endTime),
         startPosition,
         curveType,
@@ -115,7 +116,8 @@ class Bar(private val diff: Difficulty, private val count: Int) {
         color: MappingArcNote.Color? = null,
         isGuidingLine: Boolean = color == null,
         arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
-    ) = diff.arcNote(calculateTimestamp(time),
+    ) = diff.arcNote(
+        calculateTimestamp(time),
         calculateTimestamp(endTime),
         startPosition,
         curveType,
@@ -135,12 +137,19 @@ class Bar(private val diff: Difficulty, private val count: Int) {
          * Create an ArcNote Tap List with bar based timestamp.
          */
         class ArcTapList(val bar: Bar, private val addTap: (Int) -> Unit) {
-            fun tap(tap: Number) {
-                addTap(bar.calculateTimestamp(tap).toInt())
+
+            fun tap(vararg tap: Number) {
+                tap.forEach {
+                    addTap(bar.calculateTimestamp(it).toInt())
+                }
             }
 
-            fun arctap(tap: Number) {
-                addTap(bar.calculateTimestamp(tap).toInt())
+            fun arctap(vararg tap: Number) {
+                tap(*tap)
+            }
+
+            fun arcTap(vararg tap: Number) {
+                tap(*tap)
             }
 
             companion object {
