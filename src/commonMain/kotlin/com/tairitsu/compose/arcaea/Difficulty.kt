@@ -1,5 +1,6 @@
 package com.tairitsu.compose.arcaea
 
+import com.tairitsu.compose.arcaea.DifficultyContext.Companion.pull
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -54,13 +55,10 @@ class Difficulty {
      * The context while mapping in code.
      */
     @Transient
-    internal val context: DifficultyContext = DifficultyContext()
+    val context: DifficultyContext = DifficultyContext()
 
-    /**
-     * The difficulty context while mapping.
-     */
-    class DifficultyContext {
-        val timingGroupStack: ArrayDeque<TimingGroup> = ArrayDeque()
+    init {
+        context["AffComposeTimingGroupStack"] = ArrayDeque<TimingGroup>()
     }
 
     /**
@@ -74,6 +72,11 @@ class Difficulty {
                 context.timingGroupStack.last()
             }
         }
+
+    companion object {
+        val DifficultyContext.timingGroupStack: ArrayDeque<TimingGroup>
+            get() = this.pull("AffComposeTimingGroupStack")
+    }
 
     /**
      * Serializer for [RatingClass]

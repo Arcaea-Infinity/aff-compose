@@ -86,19 +86,21 @@ class LocalizedString : Map<String, String> {
             "en" to "en", "ja" to "ja", "ko" to "ko", "zhHans" to "zh-Hans", "zhHant" to "zh-Hant"
         )
 
-        operator fun getValue(obj: LocalizedString, property: KProperty<*>): String
-                = obj[localeNameMapping[property.name]!!] ?: obj.en
+        operator fun getValue(obj: LocalizedString, property: KProperty<*>): String =
+            obj[localeNameMapping[property.name]!!] ?: obj.en
 
         operator fun setValue(obj: LocalizedString, property: KProperty<*>, value: String) {
             obj[localeNameMapping[property.name]!!] = value
         }
     }
 
+
     /**
      * Serializer for [LocalizedString].
      */
     object LocalizedStringSerializer : KSerializer<LocalizedString> {
-        private val mapSerializer = kotlinx.serialization.builtins.MapSerializer(String.serializer(), String.serializer())
+        private val mapSerializer =
+            kotlinx.serialization.builtins.MapSerializer(String.serializer(), String.serializer())
 
         override fun deserialize(decoder: Decoder): LocalizedString {
             val map = LinkedHashMap(mapSerializer.deserialize(decoder))
@@ -113,5 +115,4 @@ class LocalizedString : Map<String, String> {
             return mapSerializer.serialize(encoder, value.storage)
         }
     }
-
 }

@@ -64,7 +64,7 @@ internal val Double.affFormat: String
     }
 
 class TimingGroup(val name: String) {
-    val timing: MutableList<Timing> = mutableListOf()
+    internal val timing: MutableList<Timing> = mutableListOf()
 
     class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject {
         override val time: Long
@@ -75,7 +75,15 @@ class TimingGroup(val name: String) {
         }
     }
 
-    val notes: MutableList<Note> = mutableListOf()
+    val notes = NoteList()
+
+    fun addNoteFilter(filter: NoteFilter) {
+        notes.addFilter(filter)
+    }
+
+    fun popNoteFilter() {
+        notes.popFilter()
+    }
 
     fun serialize(padding: Int): String {
         val `object` = mutableListOf<TimedObject>()
@@ -245,6 +253,10 @@ class ArcNote(
         fun arcTap(vararg tap: Int) {
             tap(*tap)
         }
+
+        val data: MutableList<Int>
+            get() = tapList
+
     }
 }
 
