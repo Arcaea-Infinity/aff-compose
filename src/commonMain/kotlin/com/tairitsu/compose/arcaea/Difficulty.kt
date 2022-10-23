@@ -73,6 +73,20 @@ class Difficulty {
             }
         }
 
+    /**
+     * Add note filter.
+     */
+    fun addNoteFilter(filter: NoteFilter) {
+        currentTimingGroup.addNoteFilter(filter)
+    }
+
+    /**
+     * Pop note filter
+     */
+    fun popNoteFilter() {
+        currentTimingGroup.popNoteFilter()
+    }
+
     companion object {
         val DifficultyContext.timingGroupStack: ArrayDeque<TimingGroup>
             get() = this.pull("AffComposeTimingGroupStack")

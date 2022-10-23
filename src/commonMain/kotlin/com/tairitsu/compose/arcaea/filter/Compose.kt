@@ -1,10 +1,12 @@
 package com.tairitsu.compose.arcaea.filter
 
 import com.tairitsu.compose.arcaea.Difficulty
+import com.tairitsu.compose.arcaea.NoteFilter
 
-fun Difficulty.mirror(closure: (Difficulty.() -> Unit)) {
-    val ctx = this.currentTimingGroup
-    ctx.notes.addFilter(MirrorFilter)
+fun Difficulty.noteFilter(noteFilter: NoteFilter, closure: (Difficulty.() -> Unit)) {
+    addNoteFilter(noteFilter)
     closure()
-    ctx.notes.popFilter()
+    popNoteFilter()
 }
+
+fun Difficulty.mirror(closure: (Difficulty.() -> Unit)) = noteFilter(MirrorFilter, closure)
