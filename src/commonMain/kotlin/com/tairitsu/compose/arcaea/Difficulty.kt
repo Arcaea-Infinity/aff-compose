@@ -1,6 +1,6 @@
 package com.tairitsu.compose.arcaea
 
-import com.tairitsu.compose.arcaea.DifficultyContext.Companion.pull
+import com.tairitsu.compose.arcaea.DifficultyContext.Companion.wrap
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -89,7 +89,7 @@ class Difficulty {
 
     companion object {
         val DifficultyContext.timingGroupStack: ArrayDeque<TimingGroup>
-            get() = this.pull("AffComposeTimingGroupStack")
+            get() = this.wrap("AffComposeTimingGroupStack")
     }
 
     /**

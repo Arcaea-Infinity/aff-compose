@@ -46,7 +46,7 @@ class DifficultyContext : MutableMap<Any, Any?> {
 
 
     companion object {
-        inline fun <reified T> DifficultyContext.pull(key: Any): T {
+        inline fun <reified T> DifficultyContext.wrap(key: Any): T {
             return this.get(key) as T
         }
     }
