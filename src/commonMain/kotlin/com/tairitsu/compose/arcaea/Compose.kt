@@ -98,9 +98,9 @@ fun <TOffset : Number, TBpm : Number, TBeat : Number> Difficulty.timing(
     offset: TOffset,
     bpm: TBpm,
     beats: TBeat,
-): TimingGroup.Timing {
+): Timing {
     val ctx = this.currentTimingGroup
-    val ret = TimingGroup.Timing(offset.toLong(), bpm.toDouble(), beats.toDouble())
+    val ret = Timing(offset.toLong(), bpm.toDouble(), beats.toDouble())
     ctx.timing.add(ret)
     return ret
 }
@@ -120,20 +120,18 @@ fun Difficulty.timingGroup(name: String = uuid4().toString(), closure: TimingGro
 
 // Normal Note
 
-fun <TTime : Number> Difficulty.normalNote(time: TTime, column: Int): NormalNote {
+fun <TTime : Number> Difficulty.normalNote(time: TTime, column: Int): Note {
     val ctx = this.currentTimingGroup
-    val ret = NormalNote(time.toLong(), column)
-    ctx.notes.add(ret)
-    return ret
+    val note = NormalNote(time.toLong(), column)
+    return ctx.addNormalNote(note)
 }
 
 // Hold Note
 
-fun <TTime : Number, TEndTime : Number> Difficulty.holdNote(time: TTime, endTime: TEndTime, column: Int): HoldNote {
+fun <TTime : Number, TEndTime : Number> Difficulty.holdNote(time: TTime, endTime: TEndTime, column: Int): Note {
     val ctx = this.currentTimingGroup
-    val ret = HoldNote(time.toLong(), endTime.toLong(), column)
-    ctx.notes.add(ret)
-    return ret
+    val note = HoldNote(time.toLong(), endTime.toLong(), column)
+    return ctx.addHoldNote(note)
 }
 
 // ArcNote
@@ -164,9 +162,9 @@ fun <TTime : Number, TEndTime : Number> Difficulty.arcNote(
     color: ArcNote.Color? = null,
     isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
-): ArcNote {
+): Note {
     val ctx = this.currentTimingGroup
-    val ret = ArcNote(time.toLong(),
+    val note = ArcNote(time.toLong(),
         endTime.toLong(),
         startPosition,
         curveType,
@@ -174,8 +172,7 @@ fun <TTime : Number, TEndTime : Number> Difficulty.arcNote(
         color ?: ArcNote.Color.BLUE,
         isGuidingLine,
         arcTapClosure)
-    ctx.notes.add(ret)
-    return ret
+    return ctx.addArcNote(note)
 }
 
 fun <TTime : Number, TEndTime : Number, TStartPositionX : Number, TStartPositionY : Number, TEndPositionX : Number, TEndPositionY : Number> Difficulty.arcNote(
@@ -187,9 +184,9 @@ fun <TTime : Number, TEndTime : Number, TStartPositionX : Number, TStartPosition
     color: ArcNote.Color? = null,
     isGuidingLine: Boolean = color == null,
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
-): ArcNote {
+): Note {
     val ctx = this.currentTimingGroup
-    val ret = ArcNote(time.toLong(),
+    val note = ArcNote(time.toLong(),
         endTime.toLong(),
         startPosition.first.toDouble() to startPosition.second.toDouble(),
         curveType,
@@ -197,6 +194,5 @@ fun <TTime : Number, TEndTime : Number, TStartPositionX : Number, TStartPosition
         color ?: ArcNote.Color.BLUE,
         isGuidingLine,
         arcTapClosure)
-    ctx.notes.add(ret)
-    return ret
+    return ctx.addArcNote(note)
 }

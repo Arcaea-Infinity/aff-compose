@@ -60,8 +60,8 @@ class MapSetTest {
         Assertions.assertEquals(1, diff.chart.subTiming.values.first().timing.size)
         Assertions.assertEquals(120.00 * 4, diff.chart.subTiming.values.first().timing.first().bpm)
 
-        Assertions.assertEquals(9, diff.chart.mainTiming.notes.size)
-        Assertions.assertEquals(7, diff.chart.subTiming.values.first().notes.size)
+        Assertions.assertEquals(9, diff.chart.mainTiming.getNotes().size)
+        Assertions.assertEquals(7, diff.chart.subTiming.values.first().getNotes().size)
 
 
         println(diff.chart.serialize())

@@ -1,5 +1,6 @@
 package com.tairitsu.compose.arcaea
 
+import kotlin.jvm.JvmField
 import kotlin.math.roundToInt
 
 class Chart {
@@ -36,16 +37,16 @@ interface TimedObject {
             val timeCmp = a.time.compareTo(b.time)
             if (timeCmp != 0) return timeCmp
 
-            if (a is TimingGroup.Timing && b is TimingGroup.Timing) {
+            if (a is Timing && b is Timing) {
                 return 0
             }
             if (a is Note && b is Note) {
                 return Note.Comparator.compare(a, b)
             }
-            if (a is TimingGroup.Timing) {
+            if (a is Timing) {
                 return -1
             }
-            if (b is TimingGroup.Timing) {
+            if (b is Timing) {
                 return 1
             }
             return 0
@@ -62,27 +63,91 @@ internal val Double.affFormat: String
         }
         return ret
     }
+class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject {
+    override val time: Long
+        get() = offset
+
+    override fun serialize(): String {
+        return "timing($offset,${bpm.affFormat},${beats.affFormat});"
+    }
+}
 
 class TimingGroup(val name: String) {
     internal val timing: MutableList<Timing> = mutableListOf()
 
-    class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject {
-        override val time: Long
-            get() = offset
+    private val noteFilters: ArrayDeque<NoteFilter> = ArrayDeque()
 
-        override fun serialize(): String {
-            return "timing($offset,${bpm.affFormat},${beats.affFormat});"
+    private val notes = mutableListOf<Note>()
+
+    /**
+     * get a copy of all [Note]
+     */
+    fun getNotes(): List<Note> {
+        return notes.toList()
+    }
+
+    private fun applyFilterImpl(note: Note): Note {
+        var ret = note
+
+        val filterSize = noteFilters.size
+        for (idx in (0 until filterSize).reversed()) {
+            ret = noteFilters[idx](ret)
         }
+
+        return ret
     }
 
-    val notes = NoteList()
+    private fun applyFilterImpl(note: Collection<Note>): Collection<Note> {
+        return note.map { applyFilterImpl(it) }
+    }
 
+    private fun Note.applyFilter(): Note {
+        return applyFilterImpl(this)
+    }
+
+    private fun Collection<Note>.applyFilter(): Collection<Note> {
+        return this.map { applyFilterImpl(it) }
+    }
+
+    /**
+     * Add a [NoteFilter]
+     */
     fun addNoteFilter(filter: NoteFilter) {
-        notes.addFilter(filter)
+        noteFilters.addLast(filter)
     }
 
+    /**
+     * Remove the last [NoteFilter]
+     */
     fun popNoteFilter() {
-        notes.popFilter()
+        noteFilters.removeLast()
+    }
+
+    /**
+     * Add a [NormalNote]
+     */
+    fun addNormalNote(note : NormalNote): Note {
+        val commitNote = note.applyFilter()
+        notes.add(commitNote)
+        return commitNote
+    }
+
+    /**
+     * Add a [HoldNote]
+     */
+    fun addHoldNote(note : HoldNote): Note {
+        val commitNote = note.applyFilter()
+        notes.add(commitNote)
+        return commitNote
+    }
+
+    /**
+     * Add a [ArcNote]
+     */
+    fun addArcNote(note : ArcNote): Note {
+        val commitNote = note.applyFilter()
+        notes.add(commitNote)
+        return commitNote
     }
 
     fun serialize(padding: Int): String {

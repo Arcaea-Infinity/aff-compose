@@ -23,7 +23,7 @@ class Bar(private val diff: Difficulty, private val count: Int) {
      * Current timing.
      * [currentTiming] is the timing group we are modifying when we create this [Bar] instance. is the timing group we are modifying when we create this [Bar] instance.
      */
-    private val currentTiming: TimingGroup.Timing = currentTimingGroup.timing.last()
+    private val currentTiming: Timing = currentTimingGroup.timing.last()
 
     /**
      * Division for a bar
@@ -34,7 +34,7 @@ class Bar(private val diff: Difficulty, private val count: Int) {
     /**
      * How long a bar is
      */
-    private val TimingGroup.Timing.barDuration: Double
+    private val Timing.barDuration: Double
         get() = 60_000 * this.beats / this.bpm
 
     /**
