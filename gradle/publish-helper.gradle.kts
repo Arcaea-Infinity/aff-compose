@@ -61,10 +61,6 @@ selfProject.publishing {
     }
 }
 
-selfProject.signing {
-    sign(selfProject.publishing.publications)
-}
-
 selfProject.tasks.javadoc {
     if (JavaVersion.current().isJava9Compatible) {
         (options as StandardJavadocDocletOptions).addBooleanOption("html5", true)
