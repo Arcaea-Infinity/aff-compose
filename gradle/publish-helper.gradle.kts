@@ -59,21 +59,6 @@ selfProject.publishing {
             }
         }
     }
-    repositories {
-        maven {
-            // change URLs to point to your repos, e.g. http://my.org/repo
-//            val releasesRepoUrl = uri(layout.buildDirectory.dir("repos/releases"))
-//            val snapshotsRepoUrl = uri(layout.buildDirectory.dir("repos/snapshots"))
-            val releasesRepoUrl = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            val snapshotsRepoUrl = uri("https://s01.oss.sonatype.org/content/repositories/snapshots/")
-            credentials {
-                username = (selfProject.findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")).toString()
-                password = (selfProject.findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")).toString()
-            }
-
-            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-        }
-    }
 }
 
 selfProject.signing {
