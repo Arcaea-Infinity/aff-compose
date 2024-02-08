@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.jvm)
     kotlin("plugin.serialization") version "1.9.21"
     `java-library`
+    `maven-publish`
 }
 
 repositories {
