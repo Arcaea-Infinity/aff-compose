@@ -115,3 +115,5 @@ hs_err_pid*
 
 .idea
 !gradle/**
+
+aff-compose

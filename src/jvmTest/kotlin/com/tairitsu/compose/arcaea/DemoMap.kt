@@ -229,7 +229,7 @@ object DemoMap {
                     normalNote(0, 1)
                 }
             }
-        }.writeToFolder(File(File(System.getProperty("user.home")), "aff-compose"))
+        }.writeToFolder(File(File("."), "aff-compose"))
     }
 
     private fun Difficulty.addBarLineEffect(startTime: Double) {
