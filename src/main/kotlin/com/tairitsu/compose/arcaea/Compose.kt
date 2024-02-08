@@ -5,6 +5,7 @@ import com.tairitsu.compose.arcaea.Difficulty.Companion.timingGroupStack
 import io.ktor.utils.io.core.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import java.io.File
 
 /**
  * Creating a new instance of [MapSet]
@@ -21,41 +22,46 @@ private val json = Json {
     explicitNulls = false
 }
 
-fun MapSet.writeToOutput(outputFactory: (String) -> Output) {
-    val songDataOutput = outputFactory("song_data.json")
-    val songData = json.encodeToString(MapSet.serializer(), this)
-    songDataOutput.writeFully(songData.toByteArray())
-    songDataOutput.close()
+fun MapSet.writeToFile(outputDirectory: String) {
+    val json = Json { prettyPrint = true }
 
-    val difficulties = this.difficulties
-    for (difficulty in difficulties) {
-        val difficultyOutput = outputFactory("${difficulty.ratingClass.rating}.aff")
-        val difficultyData = difficulty.chart.serialize()
-        difficultyOutput.writeFully(difficultyData.toByteArray())
-        difficultyOutput.close()
+    val songDataFile = File(outputDirectory, "song_data.json")
+    songDataFile.writeText(json.encodeToString(MapSet.serializer(), this))
+
+    this.difficulties.forEach { difficulty ->
+        val difficultyFile = File(outputDirectory, "${difficulty.ratingClass.rating}.aff")
+        difficultyFile.writeText(difficulty.chart.serialize())
     }
 
-    val songConfig = outputFactory("songconfig.txt")
-    songConfig.writeFully("id=${this.id}\r\n".toByteArray())
-    songConfig.writeFully("title=${this.titleLocalized.en}\r\n".toByteArray())
-    songConfig.writeFully("artist=${this.artist}\r\n".toByteArray())
-    songConfig.writeFully("designer=${
-        this.difficulties.map { it.chartDesigner }.toSet().joinToString(separator = ",")
-    }\r\n".toByteArray())
-    songConfig.writeFully("bpm_disp=${this.bpm}\r\n".toByteArray())
-    songConfig.writeFully("bpm_base=${this.bpmBase}\r\n".toByteArray())
-    songConfig.writeFully("side=${this.side.id}\r\n".toByteArray())
-    songConfig.writeFully("diff=${
-        this.difficulties.past?.rating ?: 0
-    }-${
-        this.difficulties.present?.rating ?: 0
-    }-${
-        this.difficulties.future?.rating ?: 0
-    }-${
-        this.difficulties.beyond?.rating ?: 0
-    }\r\n".toByteArray())
-    songConfig.close()
+    val lineSeparator = System.lineSeparator()
+
+    val songConfigFile = File(outputDirectory, "songconfig.txt").bufferedWriter()
+    songConfigFile.use { writer ->
+        writer.write("id=${this.id}$lineSeparator")
+        writer.write("title=${this.titleLocalized.en}$lineSeparator")
+        writer.write("artist=${this.artist}$lineSeparator")
+        writer.write(
+            "designer=${
+                this.difficulties.map { it.chartDesigner }.toSet().joinToString(separator = ",")
+            }$lineSeparator"
+        )
+        writer.write("bpm_disp=${this.bpm}$lineSeparator")
+        writer.write("bpm_base=${this.bpmBase}$lineSeparator")
+        writer.write("side=${this.side.id}$lineSeparator")
+        writer.write(
+            "diff=${
+                this.difficulties.past?.rating ?: 0
+            }-${
+                this.difficulties.present?.rating ?: 0
+            }-${
+                this.difficulties.future?.rating ?: 0
+            }-${
+                this.difficulties.beyond?.rating ?: 0
+            }$lineSeparator"
+        )
+    }
 }
+
 
 /**
  * Get the existing or creating a new past [Difficulty] of the [MapSet]
@@ -164,14 +170,16 @@ fun <TTime : Number, TEndTime : Number> Difficulty.arcNote(
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ): Note {
     val ctx = this.currentTimingGroup
-    val note = ArcNote(time.toLong(),
+    val note = ArcNote(
+        time.toLong(),
         endTime.toLong(),
         startPosition,
         curveType,
         endPosition,
         color ?: ArcNote.Color.BLUE,
         isGuidingLine,
-        arcTapClosure)
+        arcTapClosure
+    )
     return ctx.addArcNote(note)
 }
 
@@ -186,13 +194,15 @@ fun <TTime : Number, TEndTime : Number, TStartPositionX : Number, TStartPosition
     arcTapClosure: (ArcNote.ArcTapList.() -> Unit) = {},
 ): Note {
     val ctx = this.currentTimingGroup
-    val note = ArcNote(time.toLong(),
+    val note = ArcNote(
+        time.toLong(),
         endTime.toLong(),
         startPosition.first.toDouble() to startPosition.second.toDouble(),
         curveType,
         endPosition.first.toDouble() to endPosition.second.toDouble(),
         color ?: ArcNote.Color.BLUE,
         isGuidingLine,
-        arcTapClosure)
+        arcTapClosure
+    )
     return ctx.addArcNote(note)
 }

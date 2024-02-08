@@ -27,6 +27,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-datetime
     api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
 
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-io-core
+    api("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
+
     // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 

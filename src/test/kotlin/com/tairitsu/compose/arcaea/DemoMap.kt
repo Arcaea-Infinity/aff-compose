@@ -2,6 +2,7 @@ package com.tairitsu.compose.arcaea
 
 import com.tairitsu.compose.arcaea.dsl.Bar
 import com.tairitsu.compose.arcaea.dsl.bar
+import java.io.File
 import kotlin.math.floor
 import kotlin.test.Test
 
@@ -230,21 +231,22 @@ object DemoMap {
 
                 printToConsole()
             }
-        }
+        }.writeToFolder(File(File("."), "result"))
     }
-}
 
-private fun Difficulty.addBarLineEffect(startTime: Double) {
-    timingGroup("BarLineEffect") {
-        val barDuration = 60000.0 / 124 * 4
-        val endTime = startTime + barDuration * 2
-        var t = startTime
-        var iterCount = 0
-        while (t < endTime) {
-            iterCount++
-            t += iterCount * 4
-            val c = floor(t).toLong()
-            arcNote(c, c + 1, -0.5 to 0.0, s, 1.5 to 0.0)
+    private fun Difficulty.addBarLineEffect(startTime: Double) {
+        timingGroup("BarLineEffect") {
+            val barDuration = 60000.0 / 124 * 4
+            val endTime = startTime + barDuration * 2
+            var t = startTime
+            var iterCount = 0
+            while (t < endTime) {
+                iterCount++
+                t += iterCount * 4
+                val c = floor(t).toLong()
+                arcNote(c, c + 1, -0.5 to 0.0, s, 1.5 to 0.0)
+            }
         }
     }
+
 }
