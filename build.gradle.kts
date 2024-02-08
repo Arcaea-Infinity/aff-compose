@@ -2,8 +2,12 @@ plugins {
     alias(libs.plugins.jvm)
     kotlin("plugin.serialization") version "1.9.21"
     `java-library`
+    java
     `maven-publish`
 }
+
+group = "com.tairitsu"
+version = "1.0.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -43,4 +47,15 @@ java {
 
 tasks.named<Test>("test") {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            groupId = project.group.toString()
+            artifactId = "aff-compose"
+            version = project.version.toString()
+        }
+    }
 }
