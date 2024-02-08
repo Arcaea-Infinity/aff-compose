@@ -1,6 +1,5 @@
 package com.tairitsu.compose.arcaea
 
-import kotlin.jvm.JvmField
 import kotlin.math.roundToInt
 
 class Chart {
@@ -18,7 +17,7 @@ class Chart {
 
         sb.append(mainTiming.serialize(0))
         for (timing in subTiming.values) {
-            sb.append("timinggroup(){\r\n")
+            sb.append("timinggroup(${timing.specialEffects.serialize()}){\r\n")
             sb.append(timing.serialize(padding = 4))
             sb.append("};\r\n")
         }
@@ -63,6 +62,7 @@ internal val Double.affFormat: String
         }
         return ret
     }
+
 class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject {
     override val time: Long
         get() = offset
@@ -72,7 +72,34 @@ class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject
     }
 }
 
+enum class TimingGroupSpecialEffect(val codeName: String) {
+    NO_INPUT("noinput"),
+    FADING_HOLDS("fadingholds"),
+    ANGLEX("anglex"),
+    ANGLEY("angley"),
+}
+
+class TimingGroupSpecialEffects() {
+
+    private val effects = mutableListOf<String>()
+
+    fun add(effect: TimingGroupSpecialEffect, extraParam: Int?) {
+        if (extraParam == null) {
+            effects.add(effect.codeName)
+        } else {
+            effects.add("${effect.codeName}${extraParam}")
+        }
+    }
+
+    fun serialize(): String {
+        return effects.joinToString(separator = "_")
+    }
+}
+
 class TimingGroup(val name: String) {
+
+    val specialEffects: TimingGroupSpecialEffects = TimingGroupSpecialEffects()
+
     internal val timing: MutableList<Timing> = mutableListOf()
 
     private val noteFilters: ArrayDeque<NoteFilter> = ArrayDeque()
@@ -126,7 +153,7 @@ class TimingGroup(val name: String) {
     /**
      * Add a [NormalNote]
      */
-    fun addNormalNote(note : NormalNote): Note {
+    fun addNormalNote(note: NormalNote): Note {
         val commitNote = note.applyFilter()
         notes.add(commitNote)
         return commitNote
@@ -135,7 +162,7 @@ class TimingGroup(val name: String) {
     /**
      * Add a [HoldNote]
      */
-    fun addHoldNote(note : HoldNote): Note {
+    fun addHoldNote(note: HoldNote): Note {
         val commitNote = note.applyFilter()
         notes.add(commitNote)
         return commitNote
@@ -144,10 +171,21 @@ class TimingGroup(val name: String) {
     /**
      * Add a [ArcNote]
      */
-    fun addArcNote(note : ArcNote): Note {
+    fun addArcNote(note: ArcNote): Note {
         val commitNote = note.applyFilter()
         notes.add(commitNote)
         return commitNote
+    }
+
+    fun addSpecialEffect(effect: TimingGroupSpecialEffect, extraParam: Int?) {
+        specialEffects.add(effect, extraParam)
+    }
+
+    fun addSpecialEffect(effect: TimingGroupSpecialEffect) {
+        if (effect == TimingGroupSpecialEffect.ANGLEX || effect == TimingGroupSpecialEffect.ANGLEY) {
+            throw IllegalArgumentException("Effect `${effect.codeName}` needs a parameter")
+        }
+        specialEffects.add(effect, null)
     }
 
     fun serialize(padding: Int): String {
