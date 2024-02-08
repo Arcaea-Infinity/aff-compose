@@ -131,7 +131,6 @@ object DemoMap {
                 timingGroup("BarLineEffect") {
                     timing(offset = 1986, bpm = 124, beats = 4)
                     addSpecialEffect(TimingGroupSpecialEffect.NO_INPUT)
-                    addSpecialEffect(TimingGroupSpecialEffect.ANGLEX, 0)
                 }
                 addBarLineEffect(bar(16).startTime.toDouble())
                 bar(16) {
