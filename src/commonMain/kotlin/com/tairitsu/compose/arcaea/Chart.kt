@@ -12,7 +12,7 @@ class Chart {
     fun serialize(): String {
         val sb = StringBuilder()
 
-        sb.append("AudioOffset:0\r\n")
+        sb.append("AudioOffset:${audioOffset}\r\n")
         sb.append("-\r\n")
 
         sb.append(mainTiming.serialize(0))
