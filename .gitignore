@@ -117,3 +117,6 @@ hs_err_pid*
 !gradle/**
 
 aff-compose
+
+# Ignore Gradle build output directory
+build
