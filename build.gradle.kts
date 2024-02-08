@@ -4,6 +4,7 @@ plugins {
     `java-library`
     java
     `maven-publish`
+    id("com.autonomousapps.dependency-analysis") version "1.29.0"
 }
 
 group = "com.tairitsu"
@@ -15,31 +16,19 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation(libs.junit.jupiter.engine)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
-    api(libs.commons.math3)
-
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-datetime
-    api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-datetime
-    api("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
-
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-io-core
-    api("org.jetbrains.kotlinx:kotlinx-io-core:0.3.1")
-
-    // https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-serialization-json
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.property("kotlinxSerializationJsonVersion")}")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core:${project.property("kotlinxSerializationJsonVersion")}")
 
     // https://mvnrepository.com/artifact/com.benasher44/uuid
     api("com.benasher44:uuid:0.8.2")
 
     // https://mvnrepository.com/artifact/io.ktor/ktor-io
     api("io.ktor:ktor-io:2.3.8")
-
-    implementation(libs.guava)
 }
 
 java {
