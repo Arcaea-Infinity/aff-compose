@@ -4,7 +4,6 @@ plugins {
     id("java")
     id("java-library")
     id("maven-publish")
-    id("signing")
 }
 
 group = "com.tairitsu"
