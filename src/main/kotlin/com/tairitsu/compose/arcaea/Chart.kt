@@ -1,5 +1,6 @@
 package com.tairitsu.compose.arcaea
 
+import java.math.BigDecimal
 import kotlin.math.roundToInt
 
 class Chart {
@@ -54,7 +55,7 @@ interface TimedObject {
 
 internal val Double.affFormat: String
     get() {
-        val ret = ((this * 100.00).roundToInt() / 100.00).toString()
+        val ret = BigDecimal((this * 100.00).roundToInt() / 100.00).toString()
         val len = ret.length
         if (ret[len - 2] == '.') {
             return ret + "0"
