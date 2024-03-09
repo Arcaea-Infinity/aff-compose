@@ -3,10 +3,9 @@ package com.tairitsu.compose.arcaea
 import kotlin.math.roundToInt
 
 class Chart {
-    val audioOffset: Long = 0
 
+    var audioOffset: Long = 0
     val mainTiming: TimingGroup = TimingGroup("main")
-
     val subTiming: MutableMap<String, TimingGroup> = mutableMapOf()
 
     fun serialize(): String {
@@ -79,7 +78,7 @@ enum class TimingGroupSpecialEffect(val codeName: String) {
     ANGLEY("angley"),
 }
 
-class TimingGroupSpecialEffects() {
+class TimingGroupSpecialEffects {
 
     private val effects = mutableListOf<String>()
 
