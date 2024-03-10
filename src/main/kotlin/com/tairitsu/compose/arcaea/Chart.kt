@@ -1,5 +1,6 @@
 package com.tairitsu.compose.arcaea
 
+import java.io.Serializable
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
@@ -360,7 +361,23 @@ class ArcNote(
     }
 }
 
-class Position(
-    val x: Double = 0.0,
-    val y: Double = 0.0,
-)
+data class Position(
+    var x: Double,
+    var y: Double,
+) : Serializable {
+
+    /**
+     * Returns string representation of the [Position] including its [x] and [y] values.
+     */
+    override fun toString(): String = "($x, $y)"
+
+    fun toList(): List<Double> = listOf(x, y)
+
+    fun toPair(): Pair<Double, Double> = x to y
+}
+
+infix fun <A : Number, B : Number> A.pos(that: B): Position = Position(this.toDouble(), that.toDouble())
+
+fun Pair<Double, Double>.toPosition(): Position {
+    return this.first pos this.second
+}
