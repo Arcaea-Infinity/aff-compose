@@ -124,6 +124,48 @@ fun Difficulty.timingGroup(name: String = uuid4().toString(), closure: TimingGro
     return newTimingGroup
 }
 
+// Scenecontrol
+
+fun Difficulty.scenecontrol(
+    time: Long,
+    type: ScenecontrolType,
+    param1: Double,
+    param2: Int
+) {
+    val ctx = this.currentTimingGroup
+    val sc = Scenecontrol(time, type, param1, param2)
+    return ctx.addScenecontrol(sc)
+}
+
+fun Difficulty.scenecontrol(
+    time: Long,
+    type: ScenecontrolType,
+    param2: Int
+) {
+    val ctx = this.currentTimingGroup
+    val sc = Scenecontrol(time, type, null, param2)
+    return ctx.addScenecontrol(sc)
+}
+
+fun Difficulty.scenecontrol(
+    time: Long,
+    type: ScenecontrolType,
+    param1: Double,
+) {
+    val ctx = this.currentTimingGroup
+    val sc = Scenecontrol(time, type, param1, null)
+    return ctx.addScenecontrol(sc)
+}
+
+fun Difficulty.scenecontrol(
+    time: Long,
+    type: ScenecontrolType,
+) {
+    val ctx = this.currentTimingGroup
+    val sc = Scenecontrol(time, type, null, null)
+    return ctx.addScenecontrol(sc)
+}
+
 // Normal Note
 
 fun <TTime : Number> Difficulty.normalNote(time: TTime, column: Int): Note {

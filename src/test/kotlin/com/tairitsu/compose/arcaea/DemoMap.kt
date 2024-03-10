@@ -130,7 +130,8 @@ object DemoMap {
 
                 timingGroup("BarLineEffect") {
                     timing(offset = 1986, bpm = 124, beats = 4)
-                    addSpecialEffect(TimingGroupSpecialEffect.NO_INPUT)
+                    addSpecialEffect(TimingGroupSpecialEffectType.NO_INPUT)
+                    scenecontrol(41308, ScenecontrolType.TRACK_HIDE)
                 }
                 addBarLineEffect(bar(16).startTime.toDouble())
                 bar(16) {
@@ -228,6 +229,7 @@ object DemoMap {
                 bar(24) {
                     normalNote(0, 1)
                 }
+
 
                 printToConsole()
             }

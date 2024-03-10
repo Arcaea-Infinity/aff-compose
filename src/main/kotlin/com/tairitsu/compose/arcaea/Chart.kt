@@ -1,7 +1,6 @@
 package com.tairitsu.compose.arcaea
 
 import java.io.Serializable
-import java.math.BigDecimal
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -39,16 +38,16 @@ interface TimedObject {
             val timeCmp = a.time.compareTo(b.time)
             if (timeCmp != 0) return timeCmp
 
-            if (a is Timing && b is Timing) {
+            if ((a is Timing && b is Timing) || (a is Scenecontrol && b is Scenecontrol)) {
                 return 0
             }
             if (a is Note && b is Note) {
                 return Note.Comparator.compare(a, b)
             }
-            if (a is Timing) {
+            if (a is Timing || a is Scenecontrol) {
                 return -1
             }
-            if (b is Timing) {
+            if (b is Timing || b is Scenecontrol) {
                 return 1
             }
             return 0
@@ -70,7 +69,50 @@ class Timing(val offset: Long, val bpm: Double, val beats: Double) : TimedObject
     }
 }
 
-enum class TimingGroupSpecialEffect(val codeName: String) {
+@Suppress("unused")
+enum class ScenecontrolType(val id: String, val paramReq1: Boolean, val paramReq2: Boolean) {
+    TRACK_HIDE("trackhide", false, false),
+    TRACK_SHOW("trackshow", false, false),
+    TRACK_DISPLAY("trackdisplay", true, true),
+    RED_LINE("redline", true, false),
+    ARCAHV_DISTORT("arcahvdistort", true, true),
+    ARCAHV_DEBRIS("arcahvdebris", true, true),
+    HIDE_GROUP("hidegroup", false, true),
+    ENWIDEN_CAMERA("enwidencamera", true, true),
+    ENWIDEN_LANES("enwidenlanes", true, true)
+}
+
+class Scenecontrol(
+    override val time: Long,
+    val type: ScenecontrolType,
+    val param1: Double?,
+    val param2: Int?
+) : TimedObject {
+    override fun serialize(): String {
+        val params = when {
+            !type.paramReq1 && !type.paramReq2 -> {
+                ""
+            }
+
+            !type.paramReq1 && type.paramReq2 -> {
+                ",0.00,${param2!!}"
+            }
+
+            type.paramReq1 && !type.paramReq2 -> {
+                ",${param1!!.affFormat},0"
+            }
+
+            else -> {
+                ",${param1!!.affFormat},${param2!!}"
+            }
+
+        }
+        return "scenecontrol(${time.toBigDecimal()},${type.id}${params});"
+    }
+}
+
+@Suppress("unused")
+enum class TimingGroupSpecialEffectType(val codeName: String) {
     NO_INPUT("noinput"),
     FADING_HOLDS("fadingholds"),
     ANGLEX("anglex"),
@@ -81,7 +123,7 @@ class TimingGroupSpecialEffects {
 
     private val effects = mutableListOf<String>()
 
-    fun add(effect: TimingGroupSpecialEffect, extraParam: Int?) {
+    fun add(effect: TimingGroupSpecialEffectType, extraParam: Int?) {
         if (extraParam == null) {
             effects.add(effect.codeName)
         } else {
@@ -103,6 +145,8 @@ class TimingGroup(val name: String) {
     private val noteFilters: ArrayDeque<NoteFilter> = ArrayDeque()
 
     private val notes = mutableListOf<Note>()
+
+    private val scenecontrols = mutableListOf<Scenecontrol>()
 
     /**
      * get a copy of all [Note]
@@ -149,6 +193,13 @@ class TimingGroup(val name: String) {
     }
 
     /**
+     * Add a [Scenecontrol]
+     */
+    fun addScenecontrol(sc: Scenecontrol) {
+        scenecontrols.add(sc)
+    }
+
+    /**
      * Add a [NormalNote]
      */
     fun addNormalNote(note: NormalNote): Note {
@@ -175,12 +226,12 @@ class TimingGroup(val name: String) {
         return commitNote
     }
 
-    fun addSpecialEffect(effect: TimingGroupSpecialEffect, extraParam: Int?) {
+    fun addSpecialEffect(effect: TimingGroupSpecialEffectType, extraParam: Int?) {
         specialEffects.add(effect, extraParam)
     }
 
-    fun addSpecialEffect(effect: TimingGroupSpecialEffect) {
-        if (effect == TimingGroupSpecialEffect.ANGLEX || effect == TimingGroupSpecialEffect.ANGLEY) {
+    fun addSpecialEffect(effect: TimingGroupSpecialEffectType) {
+        if (effect == TimingGroupSpecialEffectType.ANGLEX || effect == TimingGroupSpecialEffectType.ANGLEY) {
             throw IllegalArgumentException("Effect `${effect.codeName}` needs a parameter")
         }
         specialEffects.add(effect, null)
@@ -190,6 +241,7 @@ class TimingGroup(val name: String) {
         val `object` = mutableListOf<TimedObject>()
         `object`.addAll(notes)
         `object`.addAll(timing)
+        `object`.addAll(scenecontrols)
         `object`.sortWith(TimedObject.Comparator)
 
         val sb = StringBuilder()
